@@ -54,6 +54,13 @@ export default {
                         position: 'top-right'
                     });
                 })
+                .catch(err => {
+                    this.$toast.open({
+                        message: err,
+                        type: 'error',
+                        position: 'top-right'
+                    });
+                })
         },
         loadCategory(){
             let slug = this.$route.params.slug;

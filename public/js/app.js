@@ -2000,6 +2000,12 @@ __webpack_require__.r(__webpack_exports__);
           type: 'success',
           position: 'top-right'
         });
+      })["catch"](function (err) {
+        _this.$toast.open({
+          message: err,
+          type: 'error',
+          position: 'top-right'
+        });
       });
     }
   }
@@ -2070,6 +2076,12 @@ __webpack_require__.r(__webpack_exports__);
         _this.$toast.open({
           message: data,
           type: 'success',
+          position: 'top-right'
+        });
+      })["catch"](function (err) {
+        _this.$toast.open({
+          message: err,
+          type: 'error',
           position: 'top-right'
         });
       });

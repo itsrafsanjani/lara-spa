@@ -52,6 +52,13 @@ export default {
                     position: 'top-right'
                 });
             })
+            .catch(err => {
+                this.$toast.open({
+                    message: err,
+                    type: 'error',
+                    position: 'top-right'
+                });
+            })
         }
     }
 }
