@@ -8,6 +8,10 @@ import CategoryList from '../pages/category/index'
 import CreateCategory from '../pages/category/create'
 import EditCategory from '../pages/category/edit'
 
+import ProductList from '../pages/product/index'
+import CreateProduct from '../pages/product/create'
+import EditProduct from '../pages/product/edit'
+
 const routes = new VueRouter({
     mode: 'history',
     routes: [
@@ -30,6 +34,22 @@ const routes = new VueRouter({
             path: '/categories/:slug/edit',
             component: EditCategory,
             name: 'category-edit'
+        }
+        ,
+        {
+            path: '/products',
+            component: ProductList,
+            name: 'product-list'
+        },
+        {
+            path: '/products/create',
+            component: CreateProduct,
+            name: 'product-create'
+        },
+        {
+            path: '/products/:slug/edit',
+            component: EditProduct,
+            name: 'product-edit'
         }
     ]
 });
