@@ -4,20 +4,35 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">Create Category</h5>
-                        <router-link :to="{ name: 'category-list' }" class="btn btn-primary">Category List</router-link>
+                        <h5 class="mb-0">Create Product</h5>
+                        <router-link :to="{ name: 'product-list' }" class="btn btn-primary">Product List</router-link>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6 offset-md-3">
-                                <form @submit.prevent="createCategories">
+                                <form @submit.prevent="createProducts">
                                     <div class="form-group">
-                                        <label for="categoryName">Category Name</label>
-                                        <input type="text" v-model="categoryForm.name" class="form-control" :class="{ 'is-invalid': categoryForm.errors.has('name') }" id="categoryName" placeholder="Category Name">
-                                        <has-error :form="categoryForm" field="name"></has-error>
+                                        <label for="productTitle">Product Title</label>
+                                        <input type="text" v-model="productForm.title" class="form-control" :class="{ 'is-invalid': productForm.errors.has('title') }" id="productTitle" placeholder="Product Title">
+                                        <has-error :form="productForm" field="title"></has-error>
                                     </div>
                                     <div class="form-group">
-                                        <button type="submit" class="btn btn-success">Create Category</button>
+                                        <label for="productPrice">Product Price</label>
+                                        <input type="text" v-model="productForm.price" class="form-control" :class="{ 'is-invalid': productForm.errors.has('price') }" id="productPrice" placeholder="Product Price">
+                                        <has-error :form="productForm" field="price"></has-error>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="productImage">Product Image</label>
+                                        <input type="file" class="form-control-file" :class="{ 'is-invalid': productForm.errors.has('image') }" id="productImage" placeholder="Product Image">
+                                        <has-error :form="productForm" field="image"></has-error>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="productDescription">Product Description</label>
+                                        <textarea type="text" v-model="productForm.description" class="form-control" :class="{ 'is-invalid': productForm.errors.has('description') }" id="productDescription" placeholder="Product Description" rows="3"></textarea>
+                                        <has-error :form="productForm" field="description"></has-error>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-success">Create Product</button>
                                     </div>
                                 </form>
                             </div>
@@ -35,22 +50,26 @@ import { Form } from 'vform'
 export default {
     data(){
         return {
-            categoryForm: new Form({
-                name: ''
+            productForm: new Form({
+                title: '',
+                price: '',
+                image: '',
+                description: '',
             })
         }
     },
     methods: {
-        createCategories(){
-            this.categoryForm.post('/api/categories')
+        createProducts(){
+            this.productForm.post('/api/products')
             .then(({ data }) => {
-                this.categoryForm.name = '';
-
-                this.$toast.open({
-                    message: data,
-                    type: 'success',
-                    position: 'top-right'
-                });
+                console.log(data)
+                // this.productForm.name = '';
+                //
+                // this.$toast.open({
+                //     message: data,
+                //     type: 'success',
+                //     position: 'top-right'
+                // });
             })
             .catch(err => {
                 this.$toast.open({

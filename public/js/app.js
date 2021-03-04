@@ -2269,28 +2269,46 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      categoryForm: new vform__WEBPACK_IMPORTED_MODULE_0__["Form"]({
-        name: ''
+      productForm: new vform__WEBPACK_IMPORTED_MODULE_0__["Form"]({
+        title: '',
+        price: '',
+        image: '',
+        description: ''
       })
     };
   },
   methods: {
-    createCategories: function createCategories() {
+    createProducts: function createProducts() {
       var _this = this;
 
-      this.categoryForm.post('/api/categories').then(function (_ref) {
+      this.productForm.post('/api/products').then(function (_ref) {
         var data = _ref.data;
-        _this.categoryForm.name = '';
-
-        _this.$toast.open({
-          message: data,
-          type: 'success',
-          position: 'top-right'
-        });
+        console.log(data); // this.productForm.name = '';
+        //
+        // this.$toast.open({
+        //     message: data,
+        //     type: 'success',
+        //     position: 'top-right'
+        // });
       })["catch"](function (err) {
         _this.$toast.open({
           message: err,
@@ -39741,7 +39759,7 @@ var render = function() {
               _c("ul", { staticClass: "navbar-nav ml-auto" }, [
                 _c(
                   "li",
-                  { staticClass: "nav-item active" },
+                  { staticClass: "nav-item" },
                   [
                     _c(
                       "router-link",
@@ -40290,15 +40308,15 @@ var render = function() {
                 "card-header d-flex justify-content-between align-items-center"
             },
             [
-              _c("h5", { staticClass: "mb-0" }, [_vm._v("Create Category")]),
+              _c("h5", { staticClass: "mb-0" }, [_vm._v("Create Product")]),
               _vm._v(" "),
               _c(
                 "router-link",
                 {
                   staticClass: "btn btn-primary",
-                  attrs: { to: { name: "category-list" } }
+                  attrs: { to: { name: "product-list" } }
                 },
-                [_vm._v("Category List")]
+                [_vm._v("Product List")]
               )
             ],
             1
@@ -40313,7 +40331,7 @@ var render = function() {
                     on: {
                       submit: function($event) {
                         $event.preventDefault()
-                        return _vm.createCategories($event)
+                        return _vm.createProducts($event)
                       }
                     }
                   },
@@ -40322,8 +40340,8 @@ var render = function() {
                       "div",
                       { staticClass: "form-group" },
                       [
-                        _c("label", { attrs: { for: "categoryName" } }, [
-                          _vm._v("Category Name")
+                        _c("label", { attrs: { for: "productTitle" } }, [
+                          _vm._v("Product Title")
                         ]),
                         _vm._v(" "),
                         _c("input", {
@@ -40331,28 +40349,28 @@ var render = function() {
                             {
                               name: "model",
                               rawName: "v-model",
-                              value: _vm.categoryForm.name,
-                              expression: "categoryForm.name"
+                              value: _vm.productForm.title,
+                              expression: "productForm.title"
                             }
                           ],
                           staticClass: "form-control",
                           class: {
-                            "is-invalid": _vm.categoryForm.errors.has("name")
+                            "is-invalid": _vm.productForm.errors.has("title")
                           },
                           attrs: {
                             type: "text",
-                            id: "categoryName",
-                            placeholder: "Category Name"
+                            id: "productTitle",
+                            placeholder: "Product Title"
                           },
-                          domProps: { value: _vm.categoryForm.name },
+                          domProps: { value: _vm.productForm.title },
                           on: {
                             input: function($event) {
                               if ($event.target.composing) {
                                 return
                               }
                               _vm.$set(
-                                _vm.categoryForm,
-                                "name",
+                                _vm.productForm,
+                                "title",
                                 $event.target.value
                               )
                             }
@@ -40360,7 +40378,133 @@ var render = function() {
                         }),
                         _vm._v(" "),
                         _c("has-error", {
-                          attrs: { form: _vm.categoryForm, field: "name" }
+                          attrs: { form: _vm.productForm, field: "title" }
+                        })
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "form-group" },
+                      [
+                        _c("label", { attrs: { for: "productPrice" } }, [
+                          _vm._v("Product Price")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.productForm.price,
+                              expression: "productForm.price"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          class: {
+                            "is-invalid": _vm.productForm.errors.has("price")
+                          },
+                          attrs: {
+                            type: "text",
+                            id: "productPrice",
+                            placeholder: "Product Price"
+                          },
+                          domProps: { value: _vm.productForm.price },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.productForm,
+                                "price",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("has-error", {
+                          attrs: { form: _vm.productForm, field: "price" }
+                        })
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "form-group" },
+                      [
+                        _c("label", { attrs: { for: "productImage" } }, [
+                          _vm._v("Product Image")
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          staticClass: "form-control-file",
+                          class: {
+                            "is-invalid": _vm.productForm.errors.has("image")
+                          },
+                          attrs: {
+                            type: "file",
+                            id: "productImage",
+                            placeholder: "Product Image"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("has-error", {
+                          attrs: { form: _vm.productForm, field: "image" }
+                        })
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "form-group" },
+                      [
+                        _c("label", { attrs: { for: "productDescription" } }, [
+                          _vm._v("Product Description")
+                        ]),
+                        _vm._v(" "),
+                        _c("textarea", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.productForm.description,
+                              expression: "productForm.description"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          class: {
+                            "is-invalid": _vm.productForm.errors.has(
+                              "description"
+                            )
+                          },
+                          attrs: {
+                            type: "text",
+                            id: "productDescription",
+                            placeholder: "Product Description",
+                            rows: "3"
+                          },
+                          domProps: { value: _vm.productForm.description },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.productForm,
+                                "description",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("has-error", {
+                          attrs: { form: _vm.productForm, field: "description" }
                         })
                       ],
                       1
@@ -40386,7 +40530,7 @@ var staticRenderFns = [
       _c(
         "button",
         { staticClass: "btn btn-success", attrs: { type: "submit" } },
-        [_vm._v("Create Category")]
+        [_vm._v("Create Product")]
       )
     ])
   }
@@ -56601,6 +56745,7 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
 
 var routes = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
   mode: 'history',
+  linkExactActiveClass: 'active',
   routes: [{
     path: '/',
     component: _pages_home__WEBPACK_IMPORTED_MODULE_2__["default"],
