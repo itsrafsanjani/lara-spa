@@ -24,6 +24,7 @@
         "vue-template-compiler": "^2.6.10"
     },
     "dependencies": {
+        "object-to-formdata": "^3.0.9",
         "vform": "^1.0.1",
         "vue-router": "^3.4.9",
         "vue-toast-notification": "^0.6.0"

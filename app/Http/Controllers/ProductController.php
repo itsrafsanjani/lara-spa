@@ -11,11 +11,13 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
-        //
+        $products = Product::latest()->paginate(20);
+
+        return response()->json($products, 200);
     }
 
     /**
@@ -32,26 +34,36 @@ class ProductController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
         $this->validate($request, [
-            'title' => 'required|max:255',
+            'category_id' => 'required',
+            'title' => 'required|max:255|unique:products',
             'price' => 'required|integer',
-//            'image' => 'required|image|max:2048',
+            'image' => 'required|image|max:2048',
             'description' => 'required',
         ]);
 
+        $slug= Str::slug(request()->input('title'));
+        $image = $request->file('image');
+
+        if($image) {
+            $imageName = $slug.'-'.uniqid().'.'.$image->getClientOriginalExtension();
+            $image->storeAs('images', $imageName);
+        }
+
         $product = Product::create([
+            'category_id' => $request->input('category_id'),
             'title' => request()->input('title'),
-            'slug' => Str::slug(request()->input('title')),
+            'slug' => $slug,
             'price' => request()->input('price'),
-//            'image' => 'image.jpg',
+            'image' => $imageName ? 'storage/images/'.$imageName : 'no-image.jpg',
             'description' => request()->input('description')
         ]);
 
-        return response($product, 200);
+        return response()->json('Product Added Successfully', 200);
     }
 
     /**

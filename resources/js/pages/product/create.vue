@@ -17,13 +17,21 @@
                                         <has-error :form="productForm" field="title"></has-error>
                                     </div>
                                     <div class="form-group">
+                                        <label for="productCategory">Product Category</label>
+                                        <select id="productCategory" v-model="productForm.category_id" class="form-control">
+                                            <option>Select Category</option>
+                                            <option v-for='category in categories' :value='category.id'>{{ category.name }}</option>
+                                        </select>
+                                        <has-error :form="productForm" field="title"></has-error>
+                                    </div>
+                                    <div class="form-group">
                                         <label for="productPrice">Product Price</label>
                                         <input type="text" v-model="productForm.price" class="form-control" :class="{ 'is-invalid': productForm.errors.has('price') }" id="productPrice" placeholder="Product Price">
                                         <has-error :form="productForm" field="price"></has-error>
                                     </div>
                                     <div class="form-group">
                                         <label for="productImage">Product Image</label>
-                                        <input type="file" class="form-control-file" :class="{ 'is-invalid': productForm.errors.has('image') }" id="productImage" placeholder="Product Image">
+                                        <input type="file" class="form-control-file" @change="onImageChange" :class="{ 'is-invalid': productForm.errors.has('image') }" id="productImage" placeholder="Product Image">
                                         <has-error :form="productForm" field="image"></has-error>
                                     </div>
                                     <div class="form-group">
@@ -46,11 +54,14 @@
 
 <script>
 import { Form } from 'vform'
+import { objectToFormData } from 'object-to-formdata'
 
 export default {
     data(){
         return {
+            categories: [],
             productForm: new Form({
+                category_id: '',
                 title: '',
                 price: '',
                 image: '',
@@ -59,17 +70,37 @@ export default {
         }
     },
     methods: {
+        loadCategories(){
+            axios.get('/api/categories')
+                .then(res => {
+                    this.categories = res.data.data
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        },
         createProducts(){
-            this.productForm.post('/api/products')
+            this.productForm.post('/api/products', {
+                transformRequest: (data, headers) => {
+                    return objectToFormData(data)
+                },
+                onUploadProgress: e => {
+                    console.log(e)
+                }
+            })
             .then(({ data }) => {
                 console.log(data)
-                // this.productForm.name = '';
-                //
-                // this.$toast.open({
-                //     message: data,
-                //     type: 'success',
-                //     position: 'top-right'
-                // });
+                this.productForm.category = '';
+                this.productForm.title = '';
+                this.productForm.price = '';
+                this.productForm.image = '';
+                this.productForm.description = '';
+
+                this.$toast.open({
+                    message: data,
+                    type: 'success',
+                    position: 'top-right'
+                });
             })
             .catch(err => {
                 this.$toast.open({
@@ -78,7 +109,15 @@ export default {
                     position: 'top-right'
                 });
             })
+        },
+        onImageChange(e){
+            const file = e.target.files[0]
+
+            this.productForm.image = file
         }
+    },
+    mounted() {
+        this.loadCategories()
     }
 }
 </script>

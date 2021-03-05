@@ -27,7 +27,9 @@
                                 <td>{{  product.title }}</td>
                                 <td>{{  product.slug }}</td>
                                 <td>{{  product.price }}</td>
-                                <td>{{  product.image }}</td>
+                                <td>
+                                    <img :src="product.image" :alt="product.title" :title="product.title" style="width: 100px">
+                                </td>
                                 <td>{{  product.description }}</td>
                                 <td>
                                     <router-link :to="{ name: 'product-edit', params: { slug: product.slug} }" class="btn btn-primary btn-sm">Edit</router-link>
