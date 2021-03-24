@@ -19,7 +19,7 @@
                                     <div class="form-group">
                                         <label for="productCategory">Product Category</label>
                                         <select id="productCategory" v-model="productForm.category_id" class="form-control">
-                                            <option>Select Category</option>
+                                            <option selected disabled value="">Select Category</option>
                                             <option v-for='category in categories' :value='category.id'>{{ category.name }}</option>
                                         </select>
                                         <has-error :form="productForm" field="title"></has-error>
@@ -90,7 +90,7 @@ export default {
             })
             .then(({ data }) => {
                 console.log(data)
-                this.productForm.category = '';
+                this.productForm.category_id = '';
                 this.productForm.title = '';
                 this.productForm.price = '';
                 this.productForm.image = '';

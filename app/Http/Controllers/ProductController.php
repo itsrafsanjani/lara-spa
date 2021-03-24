@@ -33,7 +33,7 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
@@ -46,11 +46,11 @@ class ProductController extends Controller
             'description' => 'required',
         ]);
 
-        $slug= Str::slug(request()->input('title'));
+        $slug = Str::slug(request()->input('title'));
         $image = $request->file('image');
 
-        if($image) {
-            $imageName = $slug.'-'.uniqid().'.'.$image->getClientOriginalExtension();
+        if ($image) {
+            $imageName = $slug . '-' . uniqid() . '.' . $image->getClientOriginalExtension();
             $image->storeAs('images', $imageName);
         }
 
@@ -59,7 +59,7 @@ class ProductController extends Controller
             'title' => request()->input('title'),
             'slug' => $slug,
             'price' => request()->input('price'),
-            'image' => $imageName ? 'storage/images/'.$imageName : 'no-image.jpg',
+            'image' => $imageName ? '/storage/images/' . $imageName : 'no-image.jpg',
             'description' => request()->input('description')
         ]);
 
@@ -69,18 +69,18 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
+     * @param \App\Models\Product $product
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Product $product)
     {
-        //
+        return response()->json($product, 200);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Product  $product
+     * @param \App\Models\Product $product
      * @return \Illuminate\Http\Response
      */
     public function edit(Product $product)
@@ -91,8 +91,8 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Product  $product
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Product $product
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Product $product)
@@ -103,11 +103,16 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
+     * @param \App\Models\Product $product
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Product $product)
     {
-        //
+        $productImage = public_path() . $product->image;
+        if (file_exists($productImage)) {
+            @unlink($productImage);
+        }
+        $product->delete();
+        return response()->json('Product Deleted Successfully', 200);
     }
 }

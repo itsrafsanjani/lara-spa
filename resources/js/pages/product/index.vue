@@ -63,7 +63,7 @@ export default {
            })
        },
         deleteProducts(product){
-           axios.delete(`/api/products/${product.id}`)
+           axios.delete(`/api/products/${product.slug}`)
             .then(({data}) => {
                 this.$toast.open({
                     message: data,
