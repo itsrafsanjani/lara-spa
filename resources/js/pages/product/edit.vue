@@ -36,12 +36,21 @@
                                                id="productPrice" placeholder="Product Price">
                                         <has-error :form="productForm" field="price"></has-error>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="productImage">Product Image</label>
-                                        <input type="file" class="form-control-file" @change="onImageChange"
-                                               :class="{ 'is-invalid': productForm.errors.has('image') }"
-                                               id="productImage" placeholder="Product Image">
-                                        <has-error :form="productForm" field="image"></has-error>
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="form-group">
+                                                <label for="productImage">Product Image</label>
+                                                <input type="file" class="form-control-file" @change="onImageChange"
+                                                       :class="{ 'is-invalid': productForm.errors.has('image') }"
+                                                       id="productImage" placeholder="Product Image">
+                                                <has-error :form="productForm" field="image"></has-error>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div>
+                                                <img :src="image" alt="" class="img-fluid">
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="productDescription">Product Description</label>
@@ -78,7 +87,9 @@ export default {
                 price: '',
                 image: '',
                 description: '',
-            })
+                _method: 'PUT'
+            }),
+            image: ''
         }
     },
     methods: {
@@ -94,7 +105,7 @@ export default {
         updateProduct() {
             let slug = this.$route.params.slug;
 
-            this.productForm.put(`/api/products/${slug}`, {
+            this.productForm.post(`/api/products/${slug}`, {
                     transformRequest: (data, headers) => {
                         return objectToFormData(data)
                     },
@@ -103,14 +114,10 @@ export default {
                     }
                 })
                 .then(({data}) => {
-                    this.productForm.category_id = '';
-                    this.productForm.title = '';
-                    this.productForm.price = '';
-                    this.productForm.image = '';
-                    this.productForm.description = '';
+                    this.image = data.image;
 
                     this.$toast.open({
-                        message: data,
+                        message: 'Product Updated Successfully',
                         type: 'success',
                         position: 'top-right'
                     });
@@ -132,8 +139,8 @@ export default {
                     this.productForm.category_id = res.data.category_id;
                     this.productForm.title = res.data.title;
                     this.productForm.price = res.data.price;
-                    this.productForm.image = res.data.image;
                     this.productForm.description = res.data.description;
+                    this.image = res.data.image;
                 })
         },
         onImageChange(e) {

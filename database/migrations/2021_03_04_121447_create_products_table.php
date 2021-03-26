@@ -18,7 +18,7 @@ class CreateProductsTable extends Migration
             $table->foreignId('category_id')->constrained()->cascadeOnDelete();
             $table->string('title')->unique();
             $table->string('slug')->unique();
-            $table->decimal('price');
+            $table->unsignedBigInteger('price');
             $table->text('image')->nullable();
             $table->text('description')->nullable();
             $table->timestamps();

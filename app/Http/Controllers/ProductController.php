@@ -47,21 +47,21 @@ class ProductController extends Controller
         ]);
 
         $slug = Str::slug(request()->input('title'));
-        $image = $request->file('image');
-
-        if ($image) {
-            $imageName = $slug . '-' . uniqid() . '.' . $image->getClientOriginalExtension();
-            $image->storeAs('images', $imageName);
-        }
 
         $product = Product::create([
             'category_id' => $request->input('category_id'),
             'title' => request()->input('title'),
             'slug' => $slug,
             'price' => request()->input('price'),
-            'image' => $imageName ? '/storage/images/' . $imageName : 'no-image.jpg',
             'description' => request()->input('description')
         ]);
+
+        if ($request->file('image')) {
+            $imageName = $slug . '-' . uniqid() . '.' . $request->file('image')->getClientOriginalExtension();
+            $request->file('image')->storeAs('images', $imageName);
+            $product->image = '/storage/images/' . $imageName;
+            $product->save();
+        }
 
         return response()->json('Product Added Successfully', 200);
     }
@@ -93,11 +93,36 @@ class ProductController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param \App\Models\Product $product
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, Product $product)
     {
-        //
+        $this->validate($request, [
+            'category_id' => 'required',
+            'title' => "required|max:255|unique:products,title, $product->id",
+            'price' => 'required|integer',
+            'image' => 'sometimes|nullable|image|max:2048',
+            'description' => 'required',
+        ]);
+
+        $slug = Str::slug(request()->input('title'));
+
+        $product->update([
+            'category_id' => $request->input('category_id'),
+            'title' => request()->input('title'),
+            'slug' => $slug,
+            'price' => request()->input('price'),
+            'description' => request()->input('description')
+        ]);
+
+        if ($request->file('image')) {
+            $imageName = $slug . '-' . uniqid() . '.' . $request->file('image')->getClientOriginalExtension();
+            $request->file('image')->storeAs('images', $imageName);
+            $product->image = '/storage/images/' . $imageName;
+            $product->save();
+        }
+
+        return response()->json($product, 200);
     }
 
     /**
